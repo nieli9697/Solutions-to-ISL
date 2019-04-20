@@ -286,6 +286,173 @@ So, we have on average a fraction of 27% of people defaulting on their credit ca
 $$\frac{p(X)}{1 - p(X)} = \frac{0.16}{1 - 0.16} = 0.19$$
 The odds that she will default is then 19%.
 
+## Chapter 5
+### 1. Using basic statistical properties of the variance, as well as single variable calculus, derive (5.6). In other words, prove that α given by (5.6) does indeed minimize Var(αX+(1−α)Y).
+We have 
+$$Var(αX+(1−α)Y)=α^2σ_X^2+(1−α)^2σ_Y^2+2α(1−α)σ_{XY}$$
+Taking the first derivative of this expression relative to α and equalling it to 0. Then we can have (5.6).
+
+### 2. We will now derive the probability that a given observation is part of a bootstrap sample. Suppose that we obtain a bootstrap sample from a set of n observations.
+
+### a. What is the probability that the first bootstrap observation is not the jth observation from the original sample? Justify your answer.
+1−1/n.
+
+### b. What is the probability that the second bootstrap observation is not the jth observation from the original sample?
+1−1/n.
+
+### c. Argue that the probability that the jth observation is not in the bootstrap sample is $(1−1/n)^n$.
+As bootstrapping sample with replacement, we have that the probability that the jth observation is not in the bootstrap sample is the product of the probabilities that each bootstrap observation is not the jth observation from the original sample
+$$(1−1/n)⋯(1−1/n)=(1−1/n)^n$$
+as these probabilities are independent.
+
+### d-f. When n=5/100/10000, what is the probability that the jth observation is in the bootstrap sample? 
+$$P(jth obs in bootstrap sample)=1−(1−1/5)^5=0.672$$
+$$P(jth obs in bootstrap sample)=1−(1−1/100)^100=0.634$$
+$$P(jth obs in bootstrap sample)=1−(1−1/10000)^10000=0.632$$
+
+### g-h. 
+A known fact from calculus tells us that
+$$\lim_{n→∞}(1+x/n)^n=e^x.$$
+If we apply this fact to our case, we get that the probability that a bootstrap sample of size n contains the jth observation converges to 1−1/e=0.632 as n→∞.
+
+### 3. (The same question as assignment 3. The following screenshot is my answer for that assignment.)
+![](Ch5Q3.png)
+
+### 4. Suppose that we use some statistical learning method to make a prediction for the response Y for a particular value of the predictor X. Carefully describe how we might estimate the standard deviation of our prediction.
+
+We may estimate the standard deviation of our prediction by using the bootstrap method. In this case, rather than obtaining new independent datasets from the population and fitting our model on those data sets, we instead obtain repeated random samples from the original dataset. In this case, we perform sampling with replacement B times and then find the corresponding estimates and the standard deviation of those B estimates by using equation (5.8).
+
+## Chapter 6
+### 1. We perform best subset, forward stepwise, and backward stepwise selection on a single data set. For each approach, we obtain p+1 models containing 0,1,2,⋯,p predictors. Explain your answers :
+
+### a. Which of the three models with k predictors has the smallest training RSS ?
+When performing best subset selection, the model with k predictors is the model with the smallest RSS among all the $C_p^k$ models with k
+predictors. 
+
+When performing forward stepwise selection, the model with k predictors is the model with the smallest RSS among the p−k models which augment the predictors in $M_{k-1}$ with one additional predictor. 
+
+When performing backward stepwise selection, the model with k predictors is the model with the smallest RSS among the k models which contains all but one of the predictors in $M_{k+1}$. 
+
+So, the model with k predictors which has the smallest training RSS is the one obtained from best subset selection as it is the one selected among all k predictors models.
+
+### b. Which of the three models with k predictors has the smallest test RSS?
+Difficult to answer: best subset selection may have the smallest test RSS because it takes into account more models than the other methods. However, the other methods might also pick a model with smaller test RSS by sheer luck.
+
+### c. True or False :
+### 1) The predictors in the k-variable model identified by forward stepwise are a subset of the predictors in the (k+1)-variable model identified by forward stepwise selection.
+True. The model with (k+1) predictors is obtained by augmenting the predictors in the model with k predictors with one additional predictor.
+
+### 2) The predictors in the k-variable model identified by backward stepwise are a subset of the predictors in the (k+1)-variable model identified by backward stepwise selection.
+True. The model with k predictors is obtained by removing one predictor from the model with (k+1) predictors.
+
+### 3) The predictors in the k-variable model identified by backward stepwise are a subset of the predictors in the (k+1)-variable model identified by forward stepwise selection.
+False. There is no direct link between the models obtained from forward and backward selection.
+
+### 4) The predictors in the k-variable model identified by forward stepwise are a subset of the predictors in the (k+1)-variable model identified by backward stepwise selection.
+False. There is no direct link between the models obtained from forward and backward selection.
+
+### 5) The predictors in the k-variable model identified by best subset are a subset of the predictors in the (k+1)-variable model identified by best subset selection.
+False. The model with (k+1) predictors is obtained by selecting among all possible models with (k+1) predictors, and so does not necessarily contain all the predictors selected for the k-variable model.
+
+### 2. For parts (a) through (c), indicate which is correct. Justify your answer.
+
+### a. The lasso, relative to least squares, is :
+The lasso is less flexible and will give improved prediction accuracy when its increase in bias is less than its decrease in variance.
+
+### b. Repeat (a) for ridge regression relative to least squares.
+Same as lasso, ridge regression is less flexible and will give improved prediction accuracy when its increase in bias is less than its decrease in variance.
+
+### c. Repeat (a) for non-linear methods relative to least squares.
+Non-linear methods are more flexible and will give improved prediction accuracy when their increase in variance are less than their decrease in bias.
+
+### 3. Suppose we estimate the regression coefficients in a linear regression model by minimizing
+$$\sum_{i=1}^n(y_i−β_0−\sum_{j=1}^p β_j x_{ij})\ subject\ to \sum_{j=1}^p |β_j|≤s$$
+### for a particular value of s. 
+
+### a. As we increase s from 0, the training RSS will :
+Steadily decrease. As we increase s from 0, we are restricting the $β_j$ coefficients less and less (the coefficients will increase to their least squares estimates), and so the model is becoming more and more flexible which provokes a steady decrease in the training RSS.
+
+### b. Repeat (a) for test RSS.
+Decrease initially, and then eventually start increasing in a U shape. As we increase s from 0, we are restricting the $β_j$ coefficients less and less (the coefficients will increase to their least squares estimates), and so the model is becoming more and more flexible which provokes at first a decrease in the test RSS before increasing again after that in a typical U shape.
+
+### c. Repeat (a) for variance.
+Steadily increase. As we increase s from 0, we are restricting the $β_j$ coefficients less and less (the coefficients will increase to their least squares estimates), and so the model is becoming more and more flexible which provokes a steady increase in variance.
+
+### d. Repeat (a) for (squared) bias.
+Steadily decrease. As we increase s from 0, we are restricting the $β_j$ coefficients less and less (the coefficients will increase to their least squares estimates), and so the model is becoming more and more flexible which provokes a steady decrease in bias.
+
+### e. Repeat (a) for the irreducible error.
+Remain constant. By definition, the irreducible error is independent of the model, and consequently independent of the value of s.
+
+### 4. Suppose we estimate the regression coefficients in a linear regression model by minimizing
+$$\sum_{i=1}^n(y_i−β_0−\sum_{j=1}^p β_j x_{ij})-\lambda \sum_{j=1}^p β_j^2$$
+### for a particular value of λ.
+
+### a. As we increase λ from 0, the training RSS will
+Steadily increase. As we increase λ from 0, we are restricting the $β_j$ coefficients more and more (the coefficients will deviate from their least squares estimates), and so the model is becoming less and less flexible which provokes a steady increase in training RSS.
+
+### b. Repeat (a) for test RSS.
+Decrease initially, and then eventually start increasing in a U shape. As we increase λ from 0, we are restricting the $β_j$ coefficients more and more (the coefficients will deviate from their least squares estimates), and so the model is becoming less and less flexible which provokes at first a decrease in the test RSS before increasing again after that in a typical U shape.
+
+### c. Repeat (a) for variance.
+Steadily decrease. As we increase λ from 0, we are restricting the $β_j$ coefficients more and more (the coefficients will deviate from their least squares estimates), and so the model is becoming less and less flexible which provokes a steady decrease in variance.
+
+### d. Repeat (a) for (squared) bias.
+Steadily increase. As we increase λ from 0, we are restricting the $β_j$ coefficients more and more (the coefficients will deviate from their least squares estimates), and so the model is becoming less and less flexible which provokes a steady increase in bias.
+
+### e. Repeat (a) for the irreducible error.
+Remain constant. By definition, the irreducible error is independent of the model, and consequently independent of the value of λ.
+
+## Chapter 8
+### 3. Consider the Gini index, classification error, and cross-entropy in a simple setting with two classes. Create a single plot that displays each of these quantities as a function of $\hat{p}_{m1}$. The x-axis should display $\hat{p}_{m1}$, ranging from 0 to 1, and the y-axis should display the value of the Gini index, classification error, and entropy.
+1 -- gini; 2 -- error; 3 -- entropy
+![](Ch8Q3.png)
+
+### 6. Provide a detailed explanation of the algorithm that is used to fit a regression tree.
+
+First we do recursive binary splitting on the data. This is a top-down approach where recursively and greedily we find the best single partitioning of the data such that the reduction of RSS is the greatest. This process is applied to each of the split parts separately until some minimal number of observations is present on each of the leaves.
+
+Then we apply cost complexity pruning of this larger tree formed in step 1 to obtain a sequence of best subtrees as a function of a parameter, α. Each value of α corresponds to a different subtree which minimizes the equation
+$$\sum_{m=i}^{|T|}\sum_{i:x_i∈R_m}(y_i−ŷ_{Rm})^2+α|T|$$
+
+Here |T| is the number of terminal nodes on the tree. When α=0 we have the original tree, and as α increases we get a more pruned version of the tree.
+
+Next, using K-fold CV, choose α. For each fold, repeat steps 1 and 2, and then evaluate the MSE as a function of α on the held out fold. Chose an α that minimizes the average error.
+
+Given the α chosen in previous step, return the tree calculated using the formula laid out in step 2 on the entire dataset with that chosen value of α.
+
+## Chapter 9
+### 3. Here we explore the maximal margin classifier on a toy data set.
+
+### a. We are given n=7 observations in p=2 dimensions. For each observation there is an associated class label. Sketch the observations.
+
+| Obs. | X1 | X2 | Y |
+| :------: |:------: |:------: |:------: |
+| 1 | 3 | 4 | R |
+| 2 | 2 | 2 | R |
+| 3 | 4 | 4 | R |
+| 4 | 1 | 4 | R |
+| 5 | 2 | 1 | B |
+| 6 | 4 | 3 | B |
+| 7 | 4 | 1 | B |
+
+### b. Sketch the hyperplane and provide the equation.
+As shown in the plot, the optimal separating hyperplane has to be between the observations (2,1) and (2,2), and between the observations (4,3) and (4,4). So it is a line that passes through the points (2,1.5) and (4,3.5) which equation is X1−X2−0.5=0.
+
+### c. Describe the classification rule for the maximal margin classifier.
+
+The classification rule is “Classify to Red if X1−X2−0.5<0, and classify to Blue otherwise.”
+
+### d. On your sketch, indicate the margin for the maximal margin hyperplane.
+The margin is here equal to 1/4
+.
+
+### e. Indicate the support vectors for the maximal margin classifier.
+The support vectors are the points (2,1), (2,2), (4,3) and (4,4).
+
+### f. Argue that a slight movement of the seventh observation would not affect the maximal margin hyperplane.
+By examining the plot, it is clear that if we moved the observation (4,1), we would not change the maximal margin hyperplane as it is not a support vector.
+
 # References:
 1. James, Gareth, et al. An introduction to statistical learning. Vol. 112. New York: springer, 2013.
 2. https://rpubs.com/ppaquay/
